@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Pro Fitness Gym — Rakhial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  :root {
+    --neon: #E8FF00;
+    --neon-red: #FF2020;
+    --bg: #080808;
+    --bg2: #0f0f0f;
+    --bg3: #161616;
+    --text: #f0f0f0;
+    --muted: #888;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* TYPOGRAPHY */
+  .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; }
+  .condensed { font-family: 'Barlow Condensed', sans-serif; }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.98), transparent);
+    backdrop-filter: blur(2px);
+  }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.08em; color: var(--neon); }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.95rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--neon); }
+  .nav-cta {
+    background: var(--neon);
+    color: #080808;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.2rem;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: #fff; transform: scale(1.03); }
+  @media(max-width:768px) { .nav-links { display: none; } }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #080808 30%, #111 100%);
+  }
+  .hero-img {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80') center/cover no-repeat;
+    opacity: 0.18;
+    filter: contrast(1.4) saturate(0.2);
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.5) 60%, rgba(8,8,8,0.2) 100%);
+  }
+  .hero-grid-line {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(232,255,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,255,0,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 900px; padding: 2rem; }
+  .hero-tag {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--neon);
+    border: 1px solid var(--neon);
+    padding: 0.3rem 0.8rem;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.6s ease both;
+  }
+  .hero-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 9rem);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: #fff;
+    animation: fadeInUp 0.7s 0.1s ease both;
+  }
+  .hero-headline span { color: var(--neon); display: block; }
+  .hero-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 1.2rem;
+    animation: fadeInUp 0.7s 0.2s ease both;
+  }
+  .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 2.5rem;
+    background: var(--neon);
+    color: #080808;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 1rem 2.5rem;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.7s 0.3s ease both;
+    transition: transform 0.2s;
+  }
+  .hero-btn::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%) skewX(-15deg);
+    transition: transform 0.4s;
+  }
+  .hero-btn:hover::after { transform: translateX(120%) skewX(-15deg); }
+  .hero-btn:hover { transform: scale(1.04); }
+  .hero-stats {
+    display: flex; gap: 3rem;
+    margin-top: 3.5rem;
+    animation: fadeInUp 0.7s 0.4s ease both;
+  }
+  .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    color: var(--neon);
+    line-height: 1;
+  }
+  .stat-lbl {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-cue {
+    position: absolute;
+    bottom: 2rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    z-index: 2;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce { 0%,100%{ transform: translateX(-50%) translateY(0); } 50%{ transform: translateX(-50%) translateY(8px); } }
+
+  /* SECTION COMMONS */
+  section { padding: 6rem 2rem; }
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--neon);
+    margin-bottom: 0.6rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    line-height: 1;
+    color: #fff;
+    letter-spacing: 0.03em;
+  }
+  .divider {
+    width: 3rem; height: 3px;
+    background: var(--neon);
+    margin: 1.2rem 0 2rem;
+  }
+
+  /* WHY CHOOSE US */
+  #why { background: var(--bg2); position: relative; }
+  #why::before {
+    content: 'PRO';
+    position: absolute; right: -1rem; top: 3rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14rem;
+    color: rgba(232,255,0,0.025);
+    pointer-events: none;
+    line-height: 1;
+  }
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+  .why-card {
+    background: var(--bg3);
+    border: 1px solid rgba(232,255,0,0.08);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .why-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--neon);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.35s ease;
+  }
+  .why-card:hover::before { transform: scaleY(1); }
+  .why-card:hover { border-color: rgba(232,255,0,0.3); transform: translateY(-4px); }
+  .why-icon {
+    width: 2.5rem; height: 2.5rem;
+    color: var(--neon);
+    margin-bottom: 1.2rem;
+  }
+  .why-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+  .why-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+  /* GALLERY */
+  #gallery { background: var(--bg); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 280px 280px;
+    gap: 0.8rem;
+    margin-top: 3rem;
+  }
+  @media(max-width:768px) { .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 180px 180px 180px; } }
+  @media(max-width:480px) { .gallery-grid { grid-template-columns: 1fr; grid-template-rows: auto; } }
+  .gallery-item {
+    position: relative; overflow: hidden;
+    cursor: pointer;
+  }
+  .gallery-item:first-child { grid-row: span 2; }
+  @media(max-width:768px) { .gallery-item:first-child { grid-row: span 1; } }
+  .gallery-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: saturate(0.2) contrast(1.2) brightness(0.75);
+    transition: filter 0.5s, transform 0.5s;
+  }
+  .gallery-item:hover .gallery-img { filter: saturate(0.6) contrast(1.1) brightness(0.9); transform: scale(1.06); }
+  .gallery-caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(8,8,8,0.95), transparent);
+    padding: 1.5rem 1rem 0.8rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--neon);
+    transform: translateY(6px);
+    transition: transform 0.3s;
+  }
+  .gallery-item:hover .gallery-caption { transform: translateY(0); }
+
+  /* TRANSFORMATION */
+  #transform { background: var(--bg2); }
+  .transform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+  .transform-card { background: var(--bg3); border: 1px solid rgba(255,255,255,0.06); overflow: hidden; }
+  .transform-imgs { display: grid; grid-template-columns: 1fr 1fr; }
+  .transform-img-wrap { position: relative; height: 220px; overflow: hidden; }
+  .transform-img-wrap img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.3) contrast(1.2); }
+  .transform-badge {
+    position: absolute; top: 0.6rem; left: 0.6rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+  }
+  .badge-before { background: rgba(0,0,0,0.7); color: var(--muted); }
+  .badge-after { background: var(--neon); color: #080808; }
+  .transform-info { padding: 1.2rem 1.5rem; }
+  .transform-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; color: #fff;
+  }
+  .transform-result { font-size: 0.8rem; color: var(--neon); margin-top: 0.3rem; }
+  .transform-duration { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* PRICING */
+  #pricing { background: var(--bg); }
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+  .price-card {
+    background: var(--bg3);
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 2.5rem 2rem;
+    position: relative;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .price-card:hover { transform: translateY(-6px); border-color: rgba(232,255,0,0.25); }
+  .price-card.featured {
+    border-color: var(--neon);
+    background: linear-gradient(135deg, #131300 0%, var(--bg3) 100%);
+  }
+  .price-card.featured::before {
+    content: 'MOST POPULAR';
+    position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+    background: var(--neon);
+    color: #080808;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    padding: 0.25rem 1rem;
+  }
+  .price-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+  .price-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    line-height: 1;
+    color: #fff;
+  }
+  .price-amount span { font-size: 1.5rem; }
+  .price-period {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-top: 0.3rem;
+    margin-bottom: 1.5rem;
+  }
+  .price-divider { height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 1.5rem; }
+  .price-features { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .price-features li {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #ccc;
+  }
+  .price-features li .check { color: var(--neon); width: 1rem; flex-shrink: 0; }
+  .price-btn {
+    display: block;
+    margin-top: 2rem;
+    text-align: center;
+    padding: 0.9rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+    border: 1px solid rgba(232,255,0,0.4);
+    color: var(--neon);
+  }
+  .price-btn:hover, .price-card.featured .price-btn {
+    background: var(--neon);
+    color: #080808;
+    border-color: var(--neon);
+  }
+  .price-card.featured .price-btn:hover { background: #fff; border-color: #fff; }
+
+  /* CONTACT */
+  #contact { background: var(--bg2); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 3rem; }
+  @media(max-width:768px) { .contact-grid { grid-template-columns: 1fr; gap: 2rem; } }
+  .contact-info-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    margin-bottom: 1.8rem;
+  }
+  .contact-icon { color: var(--neon); width: 1.3rem; margin-top: 0.15rem; flex-shrink: 0; }
+  .contact-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 0.3rem;
+  }
+  .contact-val { font-size: 0.95rem; color: #ddd; line-height: 1.5; }
+  .contact-form-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.3rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: #fff; margin-bottom: 1.5rem;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  @media(max-width:480px) { .form-row { grid-template-columns: 1fr; } }
+  .form-field { margin-bottom: 1rem; }
+  .form-field input, .form-field select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem;
+    padding: 0.85rem 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .form-field input::placeholder { color: #555; }
+  .form-field input:focus, .form-field select:focus { border-color: var(--neon); }
+  .form-field select option { background: #111; }
+  .form-submit {
+    width: 100%;
+    background: var(--neon);
+    color: #080808;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .form-submit:hover { background: #fff; transform: scale(1.02); }
+
+  /* FOOTER */
+  footer {
+    background: #040404;
+    padding: 2rem;
+    border-top: 1px solid rgba(232,255,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--neon); letter-spacing: 0.08em; }
+  .footer-copy { font-size: 0.78rem; color: #444; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.1em; }
+
+  /* FLOATING WHATSAPP */
+  .wa-btn {
+    position: fixed;
+    bottom: 2rem; right: 2rem;
+    z-index: 999;
+    background: #25D366;
+    color: #fff;
+    width: 3.6rem; height: 3.6rem;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 24px rgba(37,211,102,0.5);
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: pulse-wa 2.5s infinite;
+  }
+  .wa-btn:hover { transform: scale(1.12); box-shadow: 0 0 36px rgba(37,211,102,0.8); }
+  @keyframes pulse-wa {
+    0%,100% { box-shadow: 0 0 24px rgba(37,211,102,0.5); }
+    50% { box-shadow: 0 0 40px rgba(37,211,102,0.9); }
+  }
+  .wa-label {
+    position: absolute; right: calc(100% + 0.8rem);
+    background: #080808;
+    border: 1px solid rgba(37,211,102,0.4);
+    color: #25D366;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.35rem 0.7rem;
+    white-space: nowrap;
+    opacity: 0; transform: translateX(8px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+  }
+  .wa-btn:hover .wa-label { opacity: 1; transform: translateX(0); }
+
+  /* ANIMATIONS */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* NEON GLOW TEXT */
+  .neon-text { color: var(--neon); text-shadow: 0 0 20px rgba(232,255,0,0.5), 0 0 40px rgba(232,255,0,0.2); }
+
+  /* TAPE LINES */
+  .tape {
+    background: var(--neon);
+    color: #080808;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.12em;
+    padding: 0.6rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .tape-inner {
+    display: inline-flex; gap: 0;
+    animation: marquee 18s linear infinite;
+  }
+  .tape-item { padding: 0 2rem; }
+  @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--neon); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">PRO FITNESS</span>
+  <div class="nav-links">
+    <a href="#why">Why Us</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a class="nav-cta" href="https://wa.me/917820000000?text=Hi!+I+want+a+Free+VIP+Trial+at+Pro+Fitness+Gym+Rakhial" target="_blank">Free Trial</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grid-line"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Rakhial's #1 Hardcore Gym</div>
+    <h1 class="hero-headline">
+      Transform<br>
+      <span>Your Body,</span>
+      Rule Your<br>Mind
+    </h1>
+    <p class="hero-sub">Rakhial's most hardcore fitness destination</p>
+    <a href="https://wa.me/917820000000?text=Hi!+I+want+a+Free+VIP+Trial+at+Pro+Fitness+Gym+Rakhial" target="_blank" class="hero-btn">
+      <i data-lucide="zap" style="width:1.1rem;height:1.1rem;"></i>
+      Claim 1-Day Free VIP Pass
+    </a>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-val">500+</div>
+        <div class="stat-lbl">Active Members</div>
+      </div>
+      <div>
+        <div class="stat-val">8+</div>
+        <div class="stat-lbl">Expert Trainers</div>
+      </div>
+      <div>
+        <div class="stat-val">5★</div>
+        <div class="stat-lbl">Rated Gym</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <i data-lucide="chevrons-down" style="width:1.2rem;height:1.2rem;"></i>
+    Scroll
+  </div>
+</section>
+
+<!-- TAPE -->
+<div class="tape">
+  <div class="tape-inner">
+    <span class="tape-item">TRANSFORM YOUR BODY</span>
+    <span class="tape-item">•</span>
+    <span class="tape-item">RULE YOUR MIND</span>
+    <span class="tape-item">•</span>
+    <span class="tape-item">PRO FITNESS RAKHIAL</span>
+    <span class="tape-item">•</span>
+    <span class="tape-item">NO EXCUSES</span>
+    <span class="tape-item">•</span>
+    <span class="tape-item">5 AM — 10 PM</span>
+    <span class="tape-item">•</span>
+    <span class="tape-item">IMPORTED MACHINES</span>
+    <span class="tape-item">•</span>
+    <span class="tape-item">TRANSFORM YOUR BODY</span>
+    <span class="tape-item">•</span>
+    <span class="tape-item">RULE YOUR MIND</span>
+    <span class="tape-item">•</span>
+    <span class="tape-item">PRO FITNESS RAKHIAL</span>
+    <span class="tape-item">•</span>
+    <span class="tape-item">NO EXCUSES</span>
+    <span class="tape-item">•</span>
+    <span class="tape-item">5 AM — 10 PM</span>
+    <span class="tape-item">•</span>
+    <span class="tape-item">IMPORTED MACHINES</span>
+    <span class="tape-item">•</span>
+  </div>
+</div>
+
+<!-- WHY CHOOSE US -->
+<section id="why">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="reveal">
+      <div class="section-label">Why Choose Us</div>
+      <h2 class="section-title">Built for <span class="neon-text">Champions</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <i data-lucide="dumbbell" class="why-icon"></i>
+        <div class="why-title">Imported Bio-Mechanic Machines</div>
+        <div class="why-desc">World-class imported equipment engineered for precise muscle activation, maximum gains, and zero compromise on your performance.</div>
+      </div>
+      <div class="why-card reveal">
+        <i data-lucide="award" class="why-icon"></i>
+        <div class="why-title">Certified Expert Trainers</div>
+        <div class="why-desc">Our certified coaches build programs around your goals — whether it's fat loss, muscle, or elite conditioning. Real results, real guidance.</div>
+      </div>
+      <div class="why-card reveal">
+        <i data-lucide="utensils" class="why-icon"></i>
+        <div class="why-title">Personalized Diet Plans</div>
+        <div class="why-desc">Fuel your transformation with customized nutrition strategies designed specifically for your body type, lifestyle, and fitness targets.</div>
+      </div>
+      <div class="why-card reveal">
+        <i data-lucide="wind" class="why-icon"></i>
+        <div class="why-title">Fully Air-Conditioned</div>
+        <div class="why-desc">Train harder in complete comfort. Our fully AC facility lets you push past limits without worrying about Rakhial's heat slowing you down.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="reveal">
+      <div class="section-label">Equipment Gallery</div>
+      <h2 class="section-title">Step into the <span class="neon-text">Arena</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="gallery-grid reveal">
+      <div class="gallery-item">
+        <img class="gallery-img" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80" alt="Strength Zone"/>
+        <div class="gallery-caption">Strength Zone</div>
+      </div>
+      <div class="gallery-item">
+        <img class="gallery-img" src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&q=80" alt="Free Weights"/>
+        <div class="gallery-caption">Free Weights</div>
+      </div>
+      <div class="gallery-item">
+        <img class="gallery-img" src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80" alt="Cardio Deck"/>
+        <div class="gallery-caption">Cardio Deck</div>
+      </div>
+      <div class="gallery-item">
+        <img class="gallery-img" src="https://images.unsplash.com/photo-1581009137042-c552e485697a?w=800&q=80" alt="Cable Machines"/>
+        <div class="gallery-caption">Cable Machines</div>
+      </div>
+      <div class="gallery-item">
+        <img class="gallery-img" src="https://images.unsplash.com/photo-1574680178050-55c6a6a96e0a?w=800&q=80" alt="Power Rack"/>
+        <div class="gallery-caption">Power Rack</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSFORMATION ZONE -->
+<section id="transform">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="reveal">
+      <div class="section-label">Transformation Zone</div>
+      <h2 class="section-title">Real People. <span class="neon-text">Real Results.</span></h2>
+      <div class="divider"></div>
+      <p style="color:var(--muted);font-size:0.95rem;max-width:560px;line-height:1.7;">Every body is a work in progress. Our members don't just train — they transform. Here's proof.</p>
+    </div>
+    <div class="transform-grid" style="margin-top:3rem;">
+      <div class="transform-card reveal">
+        <div class="transform-imgs">
+          <div class="transform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=400&q=80" alt="Before"/>
+            <div class="transform-badge badge-before">Before</div>
+          </div>
+          <div class="transform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=400&q=80" alt="After"/>
+            <div class="transform-badge badge-after">After</div>
+          </div>
+        </div>
+        <div class="transform-info">
+          <div class="transform-name">Rahul M.</div>
+          <div class="transform-result">Lost 18 kg · Gained Lean Muscle</div>
+          <div class="transform-duration">6 Month Journey • Personalized Program</div>
+        </div>
+      </div>
+      <div class="transform-card reveal">
+        <div class="transform-imgs">
+          <div class="transform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Before"/>
+            <div class="transform-badge badge-before">Before</div>
+          </div>
+          <div class="transform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=400&q=80" alt="After"/>
+            <div class="transform-badge badge-after">After</div>
+          </div>
+        </div>
+        <div class="transform-info">
+          <div class="transform-name">Priya S.</div>
+          <div class="transform-result">Dropped 3 Dress Sizes · Toned & Fit</div>
+          <div class="transform-duration">4 Month Journey • Diet + Training</div>
+        </div>
+      </div>
+      <div class="transform-card reveal">
+        <div class="transform-imgs">
+          <div class="transform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1504593811423-6dd665756598?w=400&q=80" alt="Before"/>
+            <div class="transform-badge badge-before">Before</div>
+          </div>
+          <div class="transform-img-wrap">
+            <img src="https://images.unsplash.com/photo-1609899517584-75d29558d024?w=400&q=80" alt="After"/>
+            <div class="transform-badge badge-after">After</div>
+          </div>
+        </div>
+        <div class="transform-info">
+          <div class="transform-name">Arjun K.</div>
+          <div class="transform-result">Bulk → Shredded Physique</div>
+          <div class="transform-duration">8 Month Journey • Strength + Cardio</div>
+        </div>
+      </div>
+    </div>
+    <!-- Trust bar -->
+    <div class="reveal" style="margin-top:3rem;display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;padding:2rem;background:var(--bg3);border:1px solid rgba(232,255,0,0.1);">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--neon);line-height:1;">500+</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.9rem;color:#888;text-transform:uppercase;letter-spacing:0.12em;">Transformations & counting. Your story starts now.</div>
+      <a href="https://wa.me/917820000000?text=I+want+to+start+my+transformation+at+Pro+Fitness+Gym+Rakhial" target="_blank" style="margin-left:auto;background:var(--neon);color:#080808;font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;font-weight:900;letter-spacing:0.15em;text-transform:uppercase;padding:0.8rem 1.8rem;text-decoration:none;">Start Mine →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div style="max-width:1000px;margin:0 auto;">
+    <div class="reveal" style="text-align:center;">
+      <div class="section-label">Membership Plans</div>
+      <h2 class="section-title">Invest in Your <span class="neon-text">Strongest</span> Self</h2>
+      <div class="divider" style="margin:1.2rem auto 0;"></div>
+      <p style="color:var(--muted);font-size:0.92rem;margin-top:1rem;">No hidden charges. No bargaining. Just results.</p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Monthly -->
+      <div class="price-card reveal">
+        <div class="price-label">Monthly</div>
+        <div class="price-amount"><span>₹</span>1,499</div>
+        <div class="price-period">per month</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><i data-lucide="check" class="check"></i>Unlimited Gym Access</li>
+          <li><i data-lucide="check" class="check"></i>Certified Trainer Support</li>
+          <li><i data-lucide="check" class="check"></i>Full AC Facility</li>
+          <li><i data-lucide="check" class="check"></i>Basic Diet Guidance</li>
+          <li><i data-lucide="check" class="check"></i>Locker Room Access</li>
+        </ul>
+        <a href="https://wa.me/917820000000?text=I+want+the+Monthly+Plan+at+Pro+Fitness+Rakhial" target="_blank" class="price-btn">Get Started</a>
+      </div>
+      <!-- Quarterly FEATURED -->
+      <div class="price-card featured reveal">
+        <div class="price-label">Quarterly</div>
+        <div class="price-amount"><span>₹</span>3,699</div>
+        <div class="price-period">per 3 months • Save ₹798</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><i data-lucide="check" class="check"></i>Unlimited Gym Access</li>
+          <li><i data-lucide="check" class="check"></i>Dedicated Trainer Sessions</li>
+          <li><i data-lucide="check" class="check"></i>Full AC Facility</li>
+          <li><i data-lucide="check" class="check"></i>Custom Diet Plan</li>
+          <li><i data-lucide="check" class="check"></i>Body Composition Analysis</li>
+          <li><i data-lucide="check" class="check"></i>Progress Tracking</li>
+        </ul>
+        <a href="https://wa.me/917820000000?text=I+want+the+Quarterly+Plan+at+Pro+Fitness+Rakhial" target="_blank" class="price-btn">Claim This Deal</a>
+      </div>
+      <!-- Yearly -->
+      <div class="price-card reveal">
+        <div class="price-label">Yearly</div>
+        <div class="price-amount"><span>₹</span>11,999</div>
+        <div class="price-period">per year • Best Value</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><i data-lucide="check" class="check"></i>Unlimited Gym Access</li>
+          <li><i data-lucide="check" class="check"></i>Priority Trainer Access</li>
+          <li><i data-lucide="check" class="check"></i>Full AC Facility</li>
+          <li><i data-lucide="check" class="check"></i>Advanced Nutrition Plan</li>
+          <li><i data-lucide="check" class="check"></i>Monthly Body Analysis</li>
+          <li><i data-lucide="check" class="check"></i>Guest Pass (2x/month)</li>
+          <li><i data-lucide="check" class="check"></i>Supplement Guidance</li>
+        </ul>
+        <a href="https://wa.me/917820000000?text=I+want+the+Yearly+Plan+at+Pro+Fitness+Rakhial" target="_blank" class="price-btn">Lock In & Save</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="reveal">
+      <div class="section-label">Find Us</div>
+      <h2 class="section-title">Come Train <span class="neon-text">With Us</span></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="contact-info-item">
+          <i data-lucide="map-pin" class="contact-icon"></i>
+          <div>
+            <div class="contact-label">Address</div>
+            <div class="contact-val">The Pro Fitness Gym<br>Rakhial Main Road, Near [Landmark]<br>Rakhial, Ahmedabad, Gujarat</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <i data-lucide="clock" class="contact-icon"></i>
+          <div>
+            <div class="contact-label">Timings</div>
+            <div class="contact-val"><strong style="color:var(--neon);">5:00 AM — 10:00 PM</strong><br>7 Days a Week · No Holidays</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <i data-lucide="phone" class="contact-icon"></i>
+          <div>
+            <div class="contact-label">Call / WhatsApp</div>
+            <div class="contact-val"><a href="tel:+917820000000" style="color:#ddd;text-decoration:none;">+91 78200 00000</a></div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <i data-lucide="instagram" class="contact-icon"></i>
+          <div>
+            <div class="contact-label">Instagram</div>
+            <div class="contact-val">@profitnessrakhial</div>
+          </div>
+        </div>
+        <!-- Map embed placeholder -->
+        <div style="margin-top:1.5rem;background:var(--bg3);border:1px solid rgba(232,255,0,0.1);height:180px;display:flex;align-items:center;justify-content:center;gap:0.8rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:0.1em;font-size:0.85rem;">
+          <i data-lucide="map" style="width:1.3rem;color:var(--neon);"></i>
+          GOOGLE MAPS EMBED — ADD YOUR IFRAME HERE
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="contact-form-title">Book Your Free Trial</div>
+        <div class="form-row">
+          <div class="form-field"><input type="text" placeholder="Your Name"/></div>
+          <div class="form-field"><input type="tel" placeholder="Phone Number"/></div>
+        </div>
+        <div class="form-field">
+          <select>
+            <option value="" disabled selected>Select Goal</option>
+            <option>Weight Loss</option>
+            <option>Muscle Building</option>
+            <option>Strength Training</option>
+            <option>General Fitness</option>
+            <option>Cardio & Endurance</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <select>
+            <option value="" disabled selected>Preferred Timing</option>
+            <option>Early Morning (5 AM – 8 AM)</option>
+            <option>Morning (8 AM – 12 PM)</option>
+            <option>Afternoon (12 PM – 4 PM)</option>
+            <option>Evening (4 PM – 7 PM)</option>
+            <option>Night (7 PM – 10 PM)</option>
+          </select>
+        </div>
+        <button class="form-submit" onclick="submitForm()">
+          <span id="btn-text">Book Free VIP Trial →</span>
+        </button>
+        <p style="font-size:0.75rem;color:#444;margin-top:0.8rem;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.08em;">We'll WhatsApp you within 30 minutes to confirm your slot.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">PRO FITNESS GYM</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;color:#444;letter-spacing:0.08em;margin-top:0.3rem;">Rakhial, Ahmedabad · Est. 2019</div>
+  </div>
+  <div class="footer-copy">© 2025 The Pro Fitness Gym, Rakhial. All Rights Reserved.</div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a class="wa-btn" href="https://wa.me/917820000000?text=Hi!+I+want+a+Free+VIP+Trial+at+Pro+Fitness+Gym+Rakhial" target="_blank" aria-label="WhatsApp">
+  <span class="wa-label">Book Free Trial</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<script>
+  // Init Lucide icons
+  lucide.createIcons();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), 60 * (Array.from(reveals).indexOf(entry.target) % 4));
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav scroll effect
+  const navEl = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      navEl.style.background = 'rgba(8,8,8,0.97)';
+      navEl.style.borderBottom = '1px solid rgba(232,255,0,0.08)';
+    } else {
+      navEl.style.background = 'linear-gradient(to bottom, rgba(8,8,8,0.98), transparent)';
+      navEl.style.borderBottom = 'none';
+    }
+  });
+
+  // Form submit
+  function submitForm() {
+    const btn = document.getElementById('btn-text');
+    btn.textContent = 'Sending to WhatsApp...';
+    setTimeout(() => {
+      window.open('https://wa.me/917820000000?text=Hi!+I+want+to+book+a+Free+VIP+Trial+at+Pro+Fitness+Gym+Rakhial', '_blank');
+      btn.textContent = '✓ Redirected to WhatsApp';
+      setTimeout(() => btn.textContent = 'Book Free VIP Trial →', 3000);
+    }, 600);
+  }
+</script>
+</body>
+</html>
